@@ -7,7 +7,7 @@ package net.codejava.swing.Subject;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class Subject {
     

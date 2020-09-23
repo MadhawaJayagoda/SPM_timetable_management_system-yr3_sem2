@@ -3,100 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.codejava.swing.Subject;
+package net.codejava.swing.sessions;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import net.codejava.swing.lecturerDetails.AddLecturer;
+import net.codejava.swing.Subject.HomeSubjects;
 import net.codejava.swing.lecturerDetails.HomeLecturers;
-import net.codejava.swing.lecturerDetails.ViewLecturer;
 
 /**
  *
  * @author  Jayagoda N.M.  -  IT17184304
  */
-public class ViewSubject extends javax.swing.JFrame {
+public class HomeSessions extends javax.swing.JFrame {
 
-    private Connection connection;
-    private Statement statement;
-    private PreparedStatement preparedStatement;
-    private String subject_code, subject_name, offered_year_and_semester;
-    private int numberOfLectureHours, numberOfTutorialHours, numberOfLabHours, numberOfEvaluationHours;
-    
     /**
-     * Creates new form ViewSubject
+     * Creates new form HomeSessions
      */
-    public ViewSubject() {
+    public HomeSessions() {
         initComponents();
-        dbconnect();
-        show_subjectDetails();
-        
-    }
-    
-    public ArrayList<Subject> subjectList() {
-        
-        ArrayList<Subject> subjectList = new ArrayList<>();
-        try {    
-            String query = "SELECT * FROM subject";
-            statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-            
-            Subject subject;
-            
-            while(rs.next()){
-                subject = new Subject(rs.getString("subject_code"), rs.getString("subject_name"), rs.getString("offeredYearandSemester"), rs.getInt("numberOfLectureHours"), 
-                                                rs.getInt("numberOfTutorialHours"), rs.getInt("numberOfLabHours"), rs.getInt("numberOfEvaluationHours"));
-                
-                subjectList.add(subject);
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex + "Exception occured in subjectList method");
-            Logger.getLogger(ViewLecturer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return subjectList;
-    }
-    
-    public void show_subjectDetails(){
-        ArrayList<Subject> subjectListData = subjectList();
-        DefaultTableModel tableModel = (DefaultTableModel) table_displaySubjectDetails.getModel();
-        Object[] row = new Object[7];
-        for (int i = 0; i < subjectListData.size(); i++) {
-            row[0] = subjectListData.get(i).getSubject_code();
-            row[1] = subjectListData.get(i).getSubject_name();
-            row[2] = subjectListData.get(i).getOffered_year_and_semester();
-            row[3] = subjectListData.get(i).getNumberOfLectureHours();
-            row[4] = subjectListData.get(i).getNumberOfLabHours();
-            row[5] = subjectListData.get(i).getNumberOfTutorialHours();
-            row[6] = subjectListData.get(i).getNumberOfEvaluationHours();
-     
-            tableModel.addRow(row);
-        }
-    }
-   
-    private void dbconnect(){
-        final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-        final String JDBC_URL = "jdbc:derby:unidb;create=true";
-        
-        try {
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(JDBC_URL);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddLecturer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(AddLecturer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }  
     }
 
     /**
@@ -113,7 +35,6 @@ public class ViewSubject extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         btn_statisticsTab = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        btn_lecturerTab = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         btn_studentTab = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
@@ -125,13 +46,13 @@ public class ViewSubject extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        btn_lecturerTab = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btn_sessionTab = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        table_displaySubjectDetails = new javax.swing.JTable();
-        btn_delete = new javax.swing.JButton();
-        btn_update = new javax.swing.JButton();
-        btn_back = new javax.swing.JButton();
+        btn_viewSubjects = new javax.swing.JButton();
+        btn_addSession = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -142,7 +63,7 @@ public class ViewSubject extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-group-of-projects-50.png"))); // NOI18N
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 770, -1, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 860, -1, -1));
 
         btn_statisticsTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
         btn_statisticsTab.setText("Statistics");
@@ -152,25 +73,14 @@ public class ViewSubject extends javax.swing.JFrame {
                 btn_statisticsTabActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_statisticsTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 750, 420, 90));
+        jPanel1.add(btn_statisticsTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 840, 420, 90));
 
         jLabel4.setBackground(new java.awt.Color(153, 102, 255));
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-lecturer-50.png"))); // NOI18N
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 50, 60));
 
-        btn_lecturerTab.setBackground(new java.awt.Color(204, 204, 204));
-        btn_lecturerTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
-        btn_lecturerTab.setText("Lectures");
-        btn_lecturerTab.setFocusPainted(false);
-        btn_lecturerTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_lecturerTabActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btn_lecturerTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 420, 90));
-
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-student-registration-50.png"))); // NOI18N
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 590, -1, -1));
 
         btn_studentTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
         btn_studentTab.setText("Students");
@@ -180,12 +90,11 @@ public class ViewSubject extends javax.swing.JFrame {
                 btn_studentTabActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_studentTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 420, 90));
+        jPanel1.add(btn_studentTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 420, 90));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-love-book-50.png"))); // NOI18N
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 500, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, -1, -1));
 
-        btn_subjectTab.setBackground(new java.awt.Color(255, 51, 102));
         btn_subjectTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
         btn_subjectTab.setText("Subjects");
         btn_subjectTab.setFocusPainted(false);
@@ -194,10 +103,10 @@ public class ViewSubject extends javax.swing.JFrame {
                 btn_subjectTabActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_subjectTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 420, 90));
+        jPanel1.add(btn_subjectTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 420, 90));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-calendar-10-50.png"))); // NOI18N
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 590, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 680, -1, -1));
 
         btn_workingDaysTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
         btn_workingDaysTab.setText("       Working days");
@@ -207,10 +116,10 @@ public class ViewSubject extends javax.swing.JFrame {
                 btn_workingDaysTabActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_workingDaysTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 420, 90));
+        jPanel1.add(btn_workingDaysTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 420, 90));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-location-64.png"))); // NOI18N
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 680, -1, 60));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 770, -1, 60));
 
         btn_locationTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
         btn_locationTab.setText("Location");
@@ -220,7 +129,7 @@ public class ViewSubject extends javax.swing.JFrame {
                 btn_locationTabActionPerformed(evt);
             }
         });
-        jPanel1.add(btn_locationTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 660, 420, 90));
+        jPanel1.add(btn_locationTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 750, 420, 90));
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -235,6 +144,32 @@ public class ViewSubject extends javax.swing.JFrame {
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 70, 70));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 420, 130));
+
+        btn_lecturerTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
+        btn_lecturerTab.setText("Lectures");
+        btn_lecturerTab.setFocusPainted(false);
+        btn_lecturerTab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_lecturerTabActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_lecturerTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 420, 90));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-stopwatch-64.png"))); // NOI18N
+        jLabel1.setText("jLabel1");
+        jLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 490, 60, 60));
+
+        btn_sessionTab.setBackground(new java.awt.Color(255, 51, 102));
+        btn_sessionTab.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
+        btn_sessionTab.setText("Sessions");
+        btn_sessionTab.setFocusPainted(false);
+        btn_sessionTab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_sessionTabActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_sessionTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 480, 420, 90));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 1000));
 
@@ -263,53 +198,25 @@ public class ViewSubject extends javax.swing.JFrame {
 
         jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 60, 1230, -1));
 
-        table_displaySubjectDetails.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        table_displaySubjectDetails.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Subject Code", "Subject Name", "Year and Semester", "Lecture hours", "Lab hours", "Tutorial hours", "Evaluation hours"
-            }
-        ));
-        table_displaySubjectDetails.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                table_displaySubjectDetailsMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(table_displaySubjectDetails);
-
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 310, 870, 610));
-
-        btn_delete.setBackground(new java.awt.Color(204, 51, 0));
-        btn_delete.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-        btn_delete.setText("Delete");
-        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+        btn_viewSubjects.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btn_viewSubjects.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-list-100.png"))); // NOI18N
+        btn_viewSubjects.setText("    View Sessions");
+        btn_viewSubjects.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_deleteActionPerformed(evt);
+                btn_viewSubjectsActionPerformed(evt);
             }
         });
-        jPanel3.add(btn_delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 580, 190, 60));
+        jPanel3.add(btn_viewSubjects, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 490, 390, 240));
 
-        btn_update.setBackground(new java.awt.Color(255, 204, 0));
-        btn_update.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-        btn_update.setText("Update");
-        btn_update.addActionListener(new java.awt.event.ActionListener() {
+        btn_addSession.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        btn_addSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/iconfinder_stop-watch-time-count_2203547.png"))); // NOI18N
+        btn_addSession.setText("   Add Session");
+        btn_addSession.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_updateActionPerformed(evt);
+                btn_addSessionActionPerformed(evt);
             }
         });
-        jPanel3.add(btn_update, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 480, 190, 60));
-
-        btn_back.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-back-40.png"))); // NOI18N
-        btn_back.setText(" Back");
-        btn_back.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_backActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 220, 160, 60));
+        jPanel3.add(btn_addSession, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 490, 390, 240));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -339,12 +246,12 @@ public class ViewSubject extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_statisticsTabActionPerformed
 
-    private void btn_lecturerTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_lecturerTabActionPerformed
+    private void btn_sessionTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sessionTabActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        HomeLecturers wnd_homeLecturer = new HomeLecturers();
-        wnd_homeLecturer.setVisible(true);
-    }//GEN-LAST:event_btn_lecturerTabActionPerformed
+        HomeSessions wnd_homeSessions = new HomeSessions();
+        wnd_homeSessions.setVisible(true);
+    }//GEN-LAST:event_btn_sessionTabActionPerformed
 
     private void btn_studentTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_studentTabActionPerformed
         // TODO add your handling code here:
@@ -365,75 +272,26 @@ public class ViewSubject extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_locationTabActionPerformed
 
-    private void table_displaySubjectDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_displaySubjectDetailsMouseClicked
-        // TODO add your handling code here:
-        int i = table_displaySubjectDetails.getSelectedRow();
-        TableModel tableModel = table_displaySubjectDetails.getModel();
-        
-        subject_code = tableModel.getValueAt(i, 0).toString();
-        subject_name = tableModel.getValueAt(i, 1).toString();
-        offered_year_and_semester = tableModel.getValueAt(i, 2).toString();
-        numberOfLectureHours = Integer.parseInt(tableModel.getValueAt(i, 3).toString());
-        numberOfLabHours = Integer.parseInt(tableModel.getValueAt(i, 4).toString());
-        numberOfTutorialHours = Integer.parseInt(tableModel.getValueAt(i, 5).toString());
-        numberOfEvaluationHours = Integer.parseInt(tableModel.getValueAt(i, 6).toString());
-        
-//        System.out.println(subject_code);
-//        System.out.println(subject_name);
-//        System.out.println(offered_year_and_semester);
-//        System.out.println(numberOfLectureHours);
-//        System.out.println(numberOfLabHours);
-//        System.out.println(numberOfTutorialHours);
-//        System.out.println(numberOfEvaluationHours);
-
-    }//GEN-LAST:event_table_displaySubjectDetailsMouseClicked
-
-    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        // TODO add your handling code here:
-        int opt = JOptionPane.showConfirmDialog(null, "Are you sure you want to Delete " + subject_name +
-                  " subject details ?", "Delete", JOptionPane.YES_NO_OPTION);
-
-        if (opt == 0) {
-            try {
-                String query = "DELETE FROM subject WHERE subject_code = ? AND subject_name = ?";
-
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setString(1, subject_code);
-                preparedStatement.setString(2, subject_name);
-
-                // execute the preparedstatement
-                preparedStatement.execute();
-
-                DefaultTableModel model = (DefaultTableModel) table_displaySubjectDetails.getModel();
-                model.setRowCount(0);
-                show_subjectDetails();
-
-                connection.close();
-
-                JOptionPane.showMessageDialog(null, "Record deleted successfully from the Database");
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Something went wrong! Please try again.");
-                System.err.println("Exception in subject delete operation : " + ex);
-                System.err.println(ex.getMessage());
-                Logger.getLogger(ViewLecturer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btn_deleteActionPerformed
-
-    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-        // TODO add your handling code here:
-        Subject subject = new Subject(subject_code, subject_name, offered_year_and_semester, numberOfLectureHours, numberOfTutorialHours, numberOfLabHours, numberOfEvaluationHours);
-        this.dispose();
-        UpdateSubject wnd_updateSubject = new UpdateSubject(subject);
-        wnd_updateSubject.setVisible(true);
-    }//GEN-LAST:event_btn_updateActionPerformed
-
-    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+    private void btn_viewSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_viewSubjectsActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        HomeSubjects wnd_homeSubjects = new HomeSubjects();
-        wnd_homeSubjects.setVisible(true);
-    }//GEN-LAST:event_btn_backActionPerformed
+        ViewSubject wnd_viewSubjectDetails = new ViewSubject();
+        wnd_viewSubjectDetails.setVisible(true);
+    }//GEN-LAST:event_btn_viewSubjectsActionPerformed
+
+    private void btn_addSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addSessionActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        AddSession wnd_addSubject = new AddSession();
+        wnd_addSubject.setVisible(true);
+    }//GEN-LAST:event_btn_addSessionActionPerformed
+
+    private void btn_lecturerTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_lecturerTabActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        HomeLecturers wnd_homeLecturer = new HomeLecturers();
+        wnd_homeLecturer.setVisible(true);
+    }//GEN-LAST:event_btn_lecturerTabActionPerformed
 
     /**
      * @param args the command line arguments
@@ -452,34 +310,35 @@ public class ViewSubject extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomeSessions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomeSessions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomeSessions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(HomeSessions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewSubject().setVisible(true);
+                new HomeSessions().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_back;
-    private javax.swing.JButton btn_delete;
+    private javax.swing.JButton btn_addSession;
     private javax.swing.JButton btn_lecturerTab;
     private javax.swing.JButton btn_locationTab;
+    private javax.swing.JButton btn_sessionTab;
     private javax.swing.JButton btn_statisticsTab;
     private javax.swing.JButton btn_studentTab;
     private javax.swing.JButton btn_subjectTab;
-    private javax.swing.JButton btn_update;
+    private javax.swing.JButton btn_viewSubjects;
     private javax.swing.JButton btn_workingDaysTab;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -493,7 +352,5 @@ public class ViewSubject extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table_displaySubjectDetails;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,7 @@ import java.sql.Statement;
 
  /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class CreateDB {
     public static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -45,12 +45,24 @@ public class CreateDB {
              
 //           connection.createStatement().execute("ALTER TABLE lecturer ALTER COLUMN building SET DATA TYPE varchar(30)");
 
-          ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM lecturer");
-          while(rs.next()){
-              System.out.println("Rank : " + rs.getString("rank"));
-              System.out.println("");
-          }
+//            connection.createStatement().execute("create table tags(tag varchar(20) unique)");
+//            connection.createStatement().execute("insert into tags values('Lecture'), ('Tutorial'), ('Practical')");
 
+//            connection.createStatement().execute("create table students(groupId varchar(20))");
+//            connection.createStatement().execute("insert into students values('Y1.S1.IT.01'), ('Y1.S1.IT.02'), ('Y1.S1.IT.03'), ('Y3.S1.SE.01.1'),('Y3.S1.SE.01.2'), ('Y4.S1.IM.01.1')");
+            
+            connection.createStatement().execute("create table sessions( sessionId INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), lecturers varchar(200), tag varchar(20), subject_name varchar(50), subject_code char(6), student_group_id varchar(20), duration integer, number_of_students integer)");
+            connection.createStatement().execute("insert into sessions(lecturers, tag, subject_name, subject_code, student_group_id, duration, number_of_students ) values('Dr. Nuwan Kodagoda, Ms. Kanchana Yasas, Ms. Dinishi Kahadagala', 'Lecture', 'Object Oriented Concepts', 'SE3050', 'Y3.S2.SE.21.1', 5, 320)");
+
+            
+//          ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM lecturer");
+//          while(rs.next()){
+//              System.out.println("Rank : " + rs.getString("rank"));
+//              System.out.println("");
+//          }
+//
         System.out.println("Table created and Records inserted successfully to the Database");
+
+
    } 
 }

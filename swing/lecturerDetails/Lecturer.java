@@ -7,7 +7,7 @@ package net.codejava.swing.lecturerDetails;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 class Lecturer {
     private String lecturer_fname, lecturer_lname, empId, faculty, department, center, building;

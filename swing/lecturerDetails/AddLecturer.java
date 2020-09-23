@@ -19,7 +19,7 @@ import net.codejava.swing.Subject.HomeSubjects;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class AddLecturer extends javax.swing.JFrame {
 
@@ -303,6 +303,11 @@ public class AddLecturer extends javax.swing.JFrame {
 
         input_building.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         input_building.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Main Building", "New Building", "D-block" }));
+        input_building.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                input_buildingActionPerformed(evt);
+            }
+        });
         jPanel3.add(input_building, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 710, 340, 40));
 
         btn_submit.setBackground(new java.awt.Color(0, 153, 51));
@@ -501,6 +506,10 @@ public class AddLecturer extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_input_centerActionPerformed
+
+    private void input_buildingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_buildingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_input_buildingActionPerformed
 
     /**
      * @param args the command line arguments

@@ -17,7 +17,7 @@ import net.codejava.swing.lecturerDetails.HomeLecturers;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class UpdateSubject extends javax.swing.JFrame {
 

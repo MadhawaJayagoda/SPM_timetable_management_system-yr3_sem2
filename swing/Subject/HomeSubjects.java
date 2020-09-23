@@ -9,7 +9,7 @@ import net.codejava.swing.lecturerDetails.HomeLecturers;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class HomeSubjects extends javax.swing.JFrame {
 

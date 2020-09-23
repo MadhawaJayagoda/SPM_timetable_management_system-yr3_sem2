@@ -11,7 +11,7 @@ import net.codejava.swing.Subject.HomeSubjects;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class HomeLecturers extends javax.swing.JFrame {
  
