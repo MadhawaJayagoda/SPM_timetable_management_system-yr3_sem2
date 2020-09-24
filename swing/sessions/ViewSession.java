@@ -24,7 +24,7 @@ import net.codejava.swing.lecturerDetails.ViewLecturer;
 
 /**
  *
- * @author nipun
+ * @author  Jayagoda N.M.  -  IT17184304
  */
 public class ViewSession extends javax.swing.JFrame {
 
