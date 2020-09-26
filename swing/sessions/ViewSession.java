@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import net.codejava.swing.Subject.HomeSubjects;
 import net.codejava.swing.lecturerDetails.AddLecturer;
 import net.codejava.swing.lecturerDetails.HomeLecturers;
@@ -33,6 +35,7 @@ public class ViewSession extends javax.swing.JFrame {
     private PreparedStatement preparedStatement;
     private String lectures, subject_code, subject_name, tag, student_group_id;
     private int duration, student_count;
+    private DefaultTableModel defTableModel;
     /**
      * Creates new form ViewSession
      */
@@ -77,6 +80,8 @@ public class ViewSession extends javax.swing.JFrame {
         btn_delete = new javax.swing.JButton();
         btn_update = new javax.swing.JButton();
         btn_back = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        filter_textField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -238,7 +243,7 @@ public class ViewSession extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(table_displaySessionDetails);
 
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 310, 870, 610));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 340, 870, 610));
 
         btn_delete.setBackground(new java.awt.Color(204, 51, 0));
         btn_delete.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
@@ -269,6 +274,21 @@ public class ViewSession extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 220, 160, 60));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/codejava/images/icons8-search-24.png"))); // NOI18N
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1350, 250, 40, 40));
+
+        filter_textField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filter_textFieldActionPerformed(evt);
+            }
+        });
+        filter_textField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                filter_textFieldKeyReleased(evt);
+            }
+        });
+        jPanel3.add(filter_textField, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 250, 510, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -377,9 +397,42 @@ public class ViewSession extends javax.swing.JFrame {
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
         // TODO add your handling code here:
-        
+        int opt = JOptionPane.showConfirmDialog(null, "Are you sure you want to Delete " + tag + " session of "
+                + subject_name + " ?", "Delete", JOptionPane.YES_NO_OPTION);
+
+        if (opt == 0) {
+            try {
+                String query = "DELETE FROM sessions WHERE subject_code = ? and tag = ?";
+
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, subject_code);
+                preparedStatement.setString(2, tag);
+
+                // execute the preparedstatement
+                preparedStatement.execute();
+
+                DefaultTableModel model = (DefaultTableModel) table_displaySessionDetails.getModel();
+                model.setRowCount(0);
+                this.showSessionList();
+
+                JOptionPane.showMessageDialog(null, "Record deleted successfully from the Database");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Something went wrong! Please try again.");
+                System.err.println("Exception in delete operation : " + ex);
+                System.err.println(ex.getMessage());
+                Logger.getLogger(ViewLecturer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btn_deleteActionPerformed
 
+    private void filter(String searchKey){
+        defTableModel = (DefaultTableModel) table_displaySessionDetails.getModel();
+        TableRowSorter<DefaultTableModel> tableSorter = new TableRowSorter<DefaultTableModel>(defTableModel);
+        table_displaySessionDetails.setRowSorter(tableSorter);
+       
+        tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchKey));
+    }
+    
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // TODO add your handling code here:
         
@@ -429,6 +482,16 @@ public class ViewSession extends javax.swing.JFrame {
         wnd_homeSessions.setVisible(true);
     }//GEN-LAST:event_btn_sessionTabActionPerformed
 
+    private void filter_textFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filter_textFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filter_textFieldActionPerformed
+
+    private void filter_textFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filter_textFieldKeyReleased
+        // TODO add your handling code here:
+        String searchKey = filter_textField.getText().toString();
+        filter(searchKey);
+    }//GEN-LAST:event_filter_textFieldKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -475,6 +538,7 @@ public class ViewSession extends javax.swing.JFrame {
     private javax.swing.JButton btn_subjectTab;
     private javax.swing.JButton btn_update;
     private javax.swing.JButton btn_workingDaysTab;
+    private javax.swing.JTextField filter_textField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -483,6 +547,7 @@ public class ViewSession extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
