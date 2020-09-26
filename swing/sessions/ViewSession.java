@@ -424,15 +424,7 @@ public class ViewSession extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btn_deleteActionPerformed
-
-    private void filter(String searchKey){
-        defTableModel = (DefaultTableModel) table_displaySessionDetails.getModel();
-        TableRowSorter<DefaultTableModel> tableSorter = new TableRowSorter<DefaultTableModel>(defTableModel);
-        table_displaySessionDetails.setRowSorter(tableSorter);
-       
-        tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchKey));
-    }
-    
+ 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // TODO add your handling code here:
         
@@ -486,6 +478,14 @@ public class ViewSession extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_filter_textFieldActionPerformed
 
+    private void filter(String searchKey){
+        defTableModel = (DefaultTableModel) table_displaySessionDetails.getModel();
+        TableRowSorter<DefaultTableModel> tableSorter = new TableRowSorter<DefaultTableModel>(defTableModel);
+        table_displaySessionDetails.setRowSorter(tableSorter);
+       
+        tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchKey));
+    }
+    
     private void filter_textFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filter_textFieldKeyReleased
         // TODO add your handling code here:
         String searchKey = filter_textField.getText().toString();
