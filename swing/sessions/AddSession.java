@@ -489,6 +489,8 @@ public class AddSession extends javax.swing.JFrame {
             }
         });
 
+        duration_spinner.setEditor(new javax.swing.JSpinner.NumberEditor(duration_spinner, ""));
+
         jLabel27.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel27.setText("hour(s)");
 
@@ -563,9 +565,15 @@ public class AddSession extends javax.swing.JFrame {
         tag = input_tag_combobox.getSelectedItem().toString();
         subject_name = input_subject_combobox.getSelectedItem().toString();
         student_group_id = input_student_group.getSelectedItem().toString();
-        duration = Integer.parseInt(duration_spinner.getValue().toString());
-        number_of_students = Integer.parseInt(input_number_of_students.getText().toString());
-                
+        
+        try {
+            duration = Integer.parseInt(duration_spinner.getValue().toString());
+            number_of_students = Integer.parseInt(input_number_of_students.getText().toString());
+        } catch (NumberFormatException ex) {
+            System.err.println("Got a Number Format Exception!");
+            System.err.println(ex.getMessage());
+        }
+        
         String query_subject_code = "select subject_code from subject where subject_name = ?";
         
         try {
@@ -583,128 +591,74 @@ public class AddSession extends javax.swing.JFrame {
         
         String query = "insert into sessions( lecturers, tag, subject_name, subject_code, student_group_id, duration, number_of_students) values( ?, ?, ?, ?, ?, ?, ?)";
         
-        try {
-            preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString( 1, lecturers);
-            preparedStmt.setString( 2, tag);
-            preparedStmt.setString( 3, subject_name);
-            preparedStmt.setString( 4, subject_code);
-            preparedStmt.setString( 5, student_group_id);
-            preparedStmt.setInt(6, duration);
-            preparedStmt.setInt(7, number_of_students);
-            
-            // execute the preparedstatement
-            preparedStmt.execute();
-            
-            connection.close();
-            preparedStmt.close();
-            
-            lecturers_session_label.setText("");
-            duration_spinner.setValue(Integer.valueOf(0));
-            input_number_of_students.setText("");
-            
-            
-            JOptionPane.showMessageDialog(null, "Record inserted successfully to the Database. \n Thank You!");
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(AddSession.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Something went wrong! Please try again.");
-            System.err.println("Got an exception!");
-            System.err.println(ex.getMessage());
+        if (!lecturers.isEmpty() && !tag.isEmpty() && !subject_name.isEmpty() && !student_group_id.isEmpty() && !duration_spinner.getValue().toString().isEmpty() && !input_number_of_students.getText().toString().isEmpty()) {
+            if (duration > 0 && number_of_students > 0 && isNumber(duration_spinner.getValue().toString()) && isNumber(input_number_of_students.getText().toString())) {
+                try {
+                    preparedStmt = connection.prepareStatement(query);
+                    preparedStmt.setString(1, lecturers);
+                    preparedStmt.setString(2, tag);
+                    preparedStmt.setString(3, subject_name);
+                    preparedStmt.setString(4, subject_code);
+                    preparedStmt.setString(5, student_group_id);
+                    preparedStmt.setInt(6, duration);
+                    preparedStmt.setInt(7, number_of_students);
+
+                    // execute the preparedstatement
+                    preparedStmt.execute();
+
+                    lecturers_session_label.setText("");
+                    duration_spinner.setValue(Integer.valueOf(0));
+                    input_number_of_students.setText("");
+
+                    JOptionPane.showMessageDialog(null, "Record inserted successfully to the Database. \n Thank You!");
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(AddSession.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Something went wrong! Please try again.");
+                    System.err.println("Got an exception!");
+                    System.err.println(ex.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Error! \n Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "One or more fields are Empty!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         
         
-        System.out.println("Lecturers for the Session : " + lecturers_session_label.getText().toString());
-        System.out.println("Spinner value duration : " + duration_spinner.getValue().toString()); 
-        System.out.println("Tag for the Session : " + input_tag_combobox.getSelectedItem().toString());
-        System.out.println("Subject Name for the Session : " + input_subject_combobox.getSelectedItem().toString());
-        System.out.println("Student group for the Session : " + input_student_group.getSelectedItem().toString());
-        System.out.println("Number of Students : " + input_number_of_students.getText().toString());
+//        System.out.println("Lecturers for the Session : " + lecturers_session_label.getText().toString());
+//        System.out.println("Spinner value duration : " + duration_spinner.getValue().toString()); 
+//        System.out.println("Tag for the Session : " + input_tag_combobox.getSelectedItem().toString());
+//        System.out.println("Subject Name for the Session : " + input_subject_combobox.getSelectedItem().toString());
+//        System.out.println("Student group for the Session : " + input_student_group.getSelectedItem().toString());
+//        System.out.println("Number of Students : " + input_number_of_students.getText().toString());
         
-//        this.lec_firstName = input_lect_fname.getText();
-//        this.lec_lastName = input_lect_lname.getText();
-//        this.empId = String.valueOf(input_lect_empId.getText());
-//        this.faculty = String.valueOf(input_faculty.getSelectedItem());
-//        this.department = String.valueOf(input_department.getSelectedItem());
-//        this.center = String.valueOf(input_center.getSelectedItem());
-//        this.building = String.valueOf(input_building.getSelectedItem());
-//        this.level_desc = String.valueOf(input_rank.getSelectedItem());
-//
-//        if( level_desc == "Professor" ){
-//            this.level = 1;
-//        } else if( level_desc == "Assitant Professor" ){
-//            this.level = 2;
-//        } else if( level_desc == "Senior Lecturer(HG)" ){
-//            this.level = 3;
-//        } else if( level_desc == "Senior Lecturer" ){
-//            this.level = 4;
-//        } else if( level_desc == "Lecturer" ){
-//            this.level = 5;
-//        } else if( level_desc == "Assistant Lecturer" ){
-//            this.level = 6;
-//        } else if( level_desc == "Instructor" ){
-//            this.level = 7;
-//        }
-//
-//        this.rank = this.level + "." +  this.empId;
-//
-//        //        System.out.println(lec_firstName);
-//        //        System.out.println(lec_lastName);
-//        //        System.out.println(empId);
-//        //        System.out.println(faculty);
-//        //        System.out.println(department);
-//        //        System.out.println(center);
-//        //        System.out.println(building);
-//        //        System.out.println(level);
-//        //        System.out.println(rank);
-//
-//        if (!lec_firstName.isEmpty() && !lec_lastName.isEmpty() && !empId.isEmpty()) {
-//            if (empId.length() == 6) {
-//                try {
-//                    String query = "insert into lecturer(lecturer_fname, lecturer_lname, employeeId, faculty, department, center, building, level, rank) "
-//                    + "values ( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-//
-//                    preparedStmt = connection.prepareStatement(query);
-//                    preparedStmt.setString(1, lec_firstName);
-//                    preparedStmt.setString(2, lec_lastName);
-//                    preparedStmt.setString(3, empId);
-//                    preparedStmt.setString(4, faculty);
-//                    preparedStmt.setString(5, department);
-//                    preparedStmt.setString(6, center);
-//                    preparedStmt.setString(7, building);
-//                    preparedStmt.setInt(8, level);
-//                    preparedStmt.setString(9, rank);
-//
-//                    // execute the preparedstatement
-//                    preparedStmt.execute();
-//
-//                    connection.close();
-//
-//                    JOptionPane.showMessageDialog(null, "Record inserted successfully to the Database. \n Thank You!");
-//
-//                    input_lect_fname.setText("");
-//                    input_lect_lname.setText("");
-//                    input_lect_empId.setText("");
-//                    input_faculty.setSelectedIndex(0);
-//                    input_department.setSelectedIndex(0);
-//                    input_center.setSelectedIndex(0);
-//                    input_building.setSelectedIndex(0);
-//                    input_rank.setSelectedIndex(0);
-//
-//                } catch (SQLException ex) {
-//                    JOptionPane.showMessageDialog(null, "Something went wrong! Please try again.");
-//                    System.err.println("Got an exception!");
-//                    System.err.println(ex.getMessage());
-//                    Logger.getLogger(AddLecturer.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Error! \n Employee ID should be a 6 digit number !", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(null, "One or more fields are empty!", "Warning", JOptionPane.WARNING_MESSAGE);
-//        }
+        String session_string = lecturers + "\n" + subject_name + " (" + subject_code + ") \n" + tag + "\n" + 
+                                    student_group_id + "\n" + number_of_students + "(" + duration + ")";
+        
+        System.out.println("Session string : " + session_string);
     }//GEN-LAST:event_btn_create_sessionActionPerformed
 
+    /**
+     * 
+     * 
+     * Check whether a input value is a number ( numeric value)
+     * @param input
+     * @return boolean 
+     */
+    public boolean isNumber(String input){
+        boolean res = false;
+        int inputInteger = 0;
+        try {
+            inputInteger = Integer.parseInt(input);
+            res = true;
+        } catch (NumberFormatException ex) {
+            return false;
+            //System.err.println("Input value is not an Integer !");
+        }
+        return res;
+    }
+    
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         this.dispose();

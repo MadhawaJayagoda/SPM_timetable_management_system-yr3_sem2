@@ -275,8 +275,8 @@ public class HomeSessions extends javax.swing.JFrame {
     private void btn_viewSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_viewSubjectsActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ViewSubject wnd_viewSubjectDetails = new ViewSubject();
-        wnd_viewSubjectDetails.setVisible(true);
+        ViewSession wnd_viewSessionDetails = new ViewSession();
+        wnd_viewSessionDetails.setVisible(true);
     }//GEN-LAST:event_btn_viewSubjectsActionPerformed
 
     private void btn_addSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addSessionActionPerformed
