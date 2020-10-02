@@ -1,0 +1,3 @@
+# SPM_timetable_management_system-yr3_sem2
+This is my individual part of Software Project Management (SPM) module - SE3080 group project ( 3rd Year 2nd Semester ), where you have to build a timetable generating system. We have used java and swing for the implementation and Apache derby as the database where the final product is a .exe executable file which can be installed in any device.
+My contribution to the project was to add Lecturer details, subject details to the system and create sessions based on those details. Also filters are implemeted to search by the lecturer, subject or student group ID
